@@ -2,13 +2,11 @@ package com.example.demo.service;
 
 import com.example.demo.model.Korisnik;
 import com.example.demo.dao.KorisnikDao;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.List;
 
 
 @Service
@@ -17,41 +15,52 @@ public class KorisnikService {
     private final KorisnikDao korisnikDao;
 
     @Autowired
-    public KorisnikService(@Qualifier("mongodb")KorisnikDao korisnikDao) {
+    public KorisnikService(KorisnikDao korisnikDao) {
         this.korisnikDao = korisnikDao;
     }
+//
+//    public Korisnik getKorisnik(String name){
+//        return korisnikDao
+//    }
 
-
-
-
-    public int addKorisnik( Korisnik korisnik){
-        return korisnikDao.insertKorisnik(korisnik);
+    public void addKorisnik(String name,String email, String password){
+        korisnikDao.save(new Korisnik(ObjectId.get(), name, email, password));
     }
 
-    public Korisnik getKorisnik(String name){
-        return korisnikDao.getKorisnik(name);
+    public List<Korisnik> getKorisnici(){
+        return korisnikDao.findAll();
     }
 
-    public Korisnik getKorisnik(UUID id){
-        return korisnikDao.getKorisnik(id);
+    public int getKorisnik(String email){
+        List<Korisnik> korisnici = null;
+        try {
+
+            System.out.println("AAAAA");
+            if(korisnikDao.findByEmail(email) == null){
+                System.out.println("USPEH!");
+                return 1;
+            }
+            System.out.println("korisnici = " + korisnici.size());
+
+        }catch (Exception error){
+
+            System.out.println("ERROR ispod");
+
+            return -1;
+        }
+        return 11111;
     }
 
-    public ArrayList<Korisnik> getKorisnici(){
-        return korisnikDao.getKorisnici();
+    public int getKorisnik(String email, String password){
+
+
+
+        return 0;
     }
 
-
-    public Optional<Korisnik> getKorsnikById(UUID id){
-        return korisnikDao.selectKorisnikById(id);
+    public void deleteSve(){
+        korisnikDao.deleteAll();
     }
 
-    public int deleteKorisnik(UUID id){
-        return korisnikDao.deleteKorisnikById(id);
-    }
-
-    public int updateKorisnik(UUID id, Korisnik noviKorisnik){
-
-        return korisnikDao.updateKorisnikById(id, noviKorisnik);
-    }
 
 }

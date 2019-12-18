@@ -7,12 +7,13 @@ import com.example.demo.service.KorisnikService;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
 ////////////////// REQUEST -> KONTROLER -> SERVIS -> DATABASE
 
-@RequestMapping("api/v1/korisnik")
+@RequestMapping("api/korisnik")
 @RestController
 public class KorisnikController {
 
@@ -24,31 +25,64 @@ public class KorisnikController {
 
     }
 
-    @PostMapping
-    public void addKorisnik(@RequestBody Korisnik korisnik){
-        korisnikService.addKorisnik(korisnik);
+
+    @DeleteMapping
+    public void deleteSve(){
+        korisnikService.deleteSve();
     }
 
+
+    @CrossOrigin(origins = "http://localhost:8081")
+    @PostMapping
+    public int addKorisnik(@RequestBody Korisnik korisnik){
+        if(korisnik.getName().equals("") || korisnik.getEmail().equals("") || korisnik.getPassword().equals("")){
+            return 0;
+        }
+        try{
+
+            korisnikService.getKorisnik(korisnik.getEmail(),korisnik.getPassword());
+
+        }catch(Exception error){
+            System.out.println("ERROR");
+            return -1;
+        }
+
+        korisnikService.addKorisnik(korisnik.getName(), korisnik.getEmail(), korisnik.getPassword());
+        return 1;
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:8081")
     @GetMapping
-    public ArrayList<Korisnik> getKorisnici(){
+    public List<Korisnik> getKorisnici(){
+        System.out.println("Nesto");
         return korisnikService.getKorisnici();
     }
 
-    @GetMapping(path = "{id}")
-    public Korisnik getKorisnikById(@PathVariable("id") UUID id){
-        return korisnikService.getKorsnikById(id).orElse(null);
+    @CrossOrigin(origins = "http://localhost:8081")
+    @GetMapping("/login")
+    public int loginUser(@RequestBody Korisnik korisnik){
+        int vratiti = -1;
+        if(korisnik.getEmail().equals("") || korisnik.getPassword().equals("")){
+
+            return vratiti;
+        }
+        vratiti = korisnikService.getKorisnik(korisnik.getEmail(),korisnik.getPassword());
+
+
+        return vratiti;
+
+
+    }
+    @GetMapping("/logintest")
+    public int loginTest(@RequestBody Korisnik korisnik){
+
+        return korisnikService.getKorisnik(korisnik.getEmail());
+
     }
 
-    @DeleteMapping(path = "{id}")
-    public int deleteKorisnikById(@PathVariable("id") UUID id){
-        return korisnikService.deleteKorisnik(id);
-    }
 
-    @PutMapping(path = "{id}")
-    public int updateKorisnik(@PathVariable UUID id,@Valid @RequestBody Korisnik noviKorisnik){
 
-        return korisnikService.updateKorisnik(id, noviKorisnik);
-    }
 
 
 }
