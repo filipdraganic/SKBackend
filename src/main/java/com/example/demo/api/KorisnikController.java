@@ -40,8 +40,10 @@ public class KorisnikController {
         }
         try{
 
-            korisnikService.getKorisnik(korisnik.getEmail(),korisnik.getPassword());
-
+            int res = korisnikService.getKorisnik(korisnik.getEmail());
+            if(res == -1){
+                return -1;
+            }
         }catch(Exception error){
             System.out.println("ERROR");
             return -1;
@@ -59,10 +61,13 @@ public class KorisnikController {
         return korisnikService.getKorisnici();
     }
 
+
+
     @CrossOrigin(origins = "http://localhost:8081")
-    @GetMapping("/login")
+    @PostMapping("/login")
     public int loginUser(@RequestBody Korisnik korisnik){
         int vratiti = -1;
+        System.out.println(korisnik.getPassword() + " "+ korisnik.getEmail());
         if(korisnik.getEmail().equals("") || korisnik.getPassword().equals("")){
 
             return vratiti;

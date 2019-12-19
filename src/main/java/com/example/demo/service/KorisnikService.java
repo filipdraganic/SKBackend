@@ -24,7 +24,14 @@ public class KorisnikService {
 //    }
 
     public void addKorisnik(String name,String email, String password){
-        korisnikDao.save(new Korisnik(ObjectId.get(), name, email, password));
+        try{
+
+            korisnikDao.save(new Korisnik(ObjectId.get(), name, email, password));
+
+            System.out.println("Uspeo");
+        }catch(Exception err){
+            System.out.println("ERROR");
+        }
     }
 
     public List<Korisnik> getKorisnici(){
@@ -32,15 +39,32 @@ public class KorisnikService {
     }
 
     public int getKorisnik(String email){
+
+
+            System.out.println("AAAAA");
+            if(korisnikDao.findByEmail(email) == null){
+                System.out.println("Nema duplikata USPEH!");
+                return 1;
+            }
+        System.out.println("Ima duplikata");
+        System.out.println(-1);
+
+        return -1;
+    }
+
+    public int getKorisnik(String email, String password){
         List<Korisnik> korisnici = null;
         try {
 
             System.out.println("AAAAA");
-            if(korisnikDao.findByEmail(email) == null){
-                System.out.println("USPEH!");
+            Korisnik toReturn = korisnikDao.findByEmail(email);
+
+            if(toReturn.getPassword().equals(password)){
+                System.out.println("LOGIN");
                 return 1;
             }
-            System.out.println("korisnici = " + korisnici.size());
+            else return 0;
+
 
         }catch (Exception error){
 
@@ -48,14 +72,8 @@ public class KorisnikService {
 
             return -1;
         }
-        return 11111;
-    }
-
-    public int getKorisnik(String email, String password){
 
 
-
-        return 0;
     }
 
     public void deleteSve(){
