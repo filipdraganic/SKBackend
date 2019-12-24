@@ -79,7 +79,7 @@ public class KorisnikController {
 
 
     }
-    @GetMapping("/logintest")
+    @GetMapping("/logintest_test_upload")
     public int loginTest(@RequestBody Korisnik korisnik){
 
         return korisnikService.getKorisnik(korisnik.getEmail());
