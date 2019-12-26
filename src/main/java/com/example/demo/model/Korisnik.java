@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.types.ObjectId;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,16 +15,15 @@ import java.util.HashMap;
 public class Korisnik {
 
     @Id
-    private final ObjectId id;
+    private ObjectId id = null;
     @NotBlank
-    private final String name;
+    private String name = null;
 
     private HashMap<String, Integer>  mikroservisi = new HashMap<>();
     @Email
     private final String email;
 
     private final String password;
-
 
     public Korisnik(@JsonProperty("id") ObjectId id,
                     @JsonProperty("name") String name,
@@ -34,10 +34,12 @@ public class Korisnik {
         this.name = name;
         this.email = email;
         this.password = password;
-        mikroservisi.put("Vremenska prognoza", 0);
-        mikroservisi.put("Pracenje akcija", 0);
-        mikroservisi.put("XKCD meme", 0);
+        mikroservisi.put("Vremenska prognoza", -1);
+        mikroservisi.put("Pracenje akcija", -1);
+        mikroservisi.put("XKCD meme", -1);
     }
+
+
 
     public ObjectId getId() {
         return id;
@@ -59,6 +61,8 @@ public class Korisnik {
         return this.password;
     }
 
+
+
     @Override
     public String toString() {
         return "Korisnik{" +
@@ -68,5 +72,12 @@ public class Korisnik {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public int compareTo(Korisnik korisnik){
+        if(this.getEmail().equals(korisnik.getEmail()) && this.getPassword().equals(this.getEmail())){
+            return 1;
+        }
+        else return 0;
     }
 }

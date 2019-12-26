@@ -6,7 +6,10 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Null;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -51,12 +54,55 @@ public class KorisnikService {
         return 11111;
     }
 
-    public int getKorisnik(String email, String password){
+    public int getKorisnik(Object email, Object password){
 
+        try{
+            Korisnik korisnik = korisnikDao.findByEmailAndPassword(email.toString(),password.toString());
+            System.out.println(korisnik.toString());
+            System.out.println(korisnik.getMikroservisi());
+            return 1;
 
+        }catch (NullPointerException exception){
+            System.out.println("NULLLLL");
 
-        return 0;
+        }
+        return -1;
     }
+
+    public int patchKorisnik(Object email, Object imeServisa){
+
+        try{
+            Korisnik korisnik = korisnikDao.findByEmail(email.toString());
+            korisnik.getMikroservisi().put(imeServisa.toString(),-1*korisnik.getMikroservisi().get(imeServisa.toString()));
+            korisnikDao.save(korisnik);
+            return 1;
+
+        }catch (NullPointerException exception){
+            System.out.println("Null u Patch korisnik");
+        }
+
+
+        return -1;
+    }
+
+    public Map<String, Integer> getSubscriptions(String email){
+
+        Map<String, Integer> failsafeMapa = new HashMap<>();
+        failsafeMapa.put("Vremenska prognoza", 0);
+        failsafeMapa.put("XKCD meme", 0);
+        failsafeMapa.put("Pracenje akcija", 0);
+        System.out.println("email = " +email);
+        try{
+            Korisnik korisnik = korisnikDao.findByEmail(email);
+            System.out.println(korisnik.getMikroservisi());
+            return korisnik.getMikroservisi();
+        }catch (NullPointerException exception){
+            System.out.println("Null u get Subscriptions");
+        }
+        return failsafeMapa;
+    }
+
+
 
     public void deleteSve(){
         korisnikDao.deleteAll();
