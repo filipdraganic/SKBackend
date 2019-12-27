@@ -85,12 +85,50 @@ public class KorisnikService {
         return -1;
     }
 
+
+    public int patchKorisnikSubscriptions(Object email, Object imeServisa, Object podesavanje){
+
+        try{
+            Korisnik korisnik = korisnikDao.findByEmail(email.toString());
+
+            System.out.println("dovde?");
+            System.out.println("korisnik je =  " + korisnik.toString());
+            System.out.println("Ime mikroservisa je = "+ imeServisa.toString());
+            System.out.println("Vrednost mikroservisa je =  "+ korisnik.getMikroservisi().get(imeServisa.toString()));
+
+            int mikroservisPodesavanje = korisnik.getMikroservisi().get(imeServisa.toString());
+            if(mikroservisPodesavanje < 0){
+                mikroservisPodesavanje /= mikroservisPodesavanje;
+                mikroservisPodesavanje *= -1;
+                mikroservisPodesavanje *= Integer.parseInt(podesavanje.toString());
+            }
+            else if(mikroservisPodesavanje > 0){
+                mikroservisPodesavanje /= mikroservisPodesavanje;
+                mikroservisPodesavanje *= Integer.parseInt(podesavanje.toString());
+            }
+            else{
+                mikroservisPodesavanje = -1;
+            }
+            System.out.println("mikroservis "+ mikroservisPodesavanje);
+            korisnik.getMikroservisi().put(imeServisa.toString(),mikroservisPodesavanje);
+            korisnikDao.save(korisnik);
+            return 1;
+
+        }catch (NullPointerException exception){
+            System.out.println("Null u Patch korisnikSubscriptions");
+        }
+
+
+        return -1;
+
+    }
+
     public Map<String, Integer> getSubscriptions(String email){
 
         Map<String, Integer> failsafeMapa = new HashMap<>();
-        failsafeMapa.put("Vremenska prognoza", 0);
-        failsafeMapa.put("XKCD meme", 0);
-        failsafeMapa.put("Pracenje akcija", 0);
+        failsafeMapa.put("Vremenska prognoza", -1);
+        failsafeMapa.put("XKCD meme", -1);
+        failsafeMapa.put("Pracenje akcija", -1);
         System.out.println("email = " +email);
         try{
             Korisnik korisnik = korisnikDao.findByEmail(email);
@@ -101,6 +139,7 @@ public class KorisnikService {
         }
         return failsafeMapa;
     }
+
 
 
 

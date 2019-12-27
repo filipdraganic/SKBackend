@@ -89,8 +89,16 @@ public class KorisnikController {
     @PatchMapping("/subscribe")
     public int patchKorisnik(@RequestBody Map<String, Object> korisnik){
 
-        System.out.println(korisnik.get("email").toString() + "  " + korisnik.get("brojServisa").toString());
-        return korisnikService.patchKorisnik(korisnik.get("email"), korisnik.get("brojServisa"));
+        System.out.println(korisnik.get("email").toString() + "  " + korisnik.get("imeServisa").toString());
+        return korisnikService.patchKorisnik(korisnik.get("email"), korisnik.get("imeServisa"));
+    }
+
+    @CrossOrigin(origins = "http://localhost:8090")
+    @PatchMapping("/subscribeSettings")
+    public int patchKorisnikSubscriptions(@RequestBody Map<String, Object> korisnik){
+
+        System.out.println(korisnik.get("email").toString() + "  " + korisnik.get("imeServisa").toString() + " " + korisnik.get("podesavanje").toString());
+        return korisnikService.patchKorisnikSubscriptions(korisnik.get("email"), korisnik.get("imeServisa"), korisnik.get("podesavanje"));
     }
 
 //    @CrossOrigin(origins = "http://localhost:8090")
