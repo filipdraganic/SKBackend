@@ -50,7 +50,7 @@ public class Scheduler {
 
     }
 
-    @Scheduled(fixedDelay = 10000)
+    //@Scheduled(fixedDelay = 10000)
     public void publish(){
         List<Korisnik> korisnici = korisnikDao.findAll();
 
@@ -64,7 +64,7 @@ public class Scheduler {
                 Date date = new Date();
                 String response = "Trenutna temperatura u Beogradu je " + temperature +" stepeni celzijusa. \n \n Zelimo vam prijatan dan";
 
-                MailDto mailDto = new MailDto(korisnik.getEmail(), "Trenutna temperatura u " + date.getTime(), response);
+                MailDto mailDto = new MailDto("skserveremail@gmail.com", "Trenutna temperatura u " + date.getTime(), response);
                 outputChannel.output().send(MessageBuilder.withPayload(mailDto).build());
                 logger.info("Hello");
             }
@@ -74,7 +74,7 @@ public class Scheduler {
 
                 String response = XKCDApirequest("http://localhost:9000/xkcd");
 
-                MailDto mailDto = new MailDto(korisnik.getEmail(), "XKCD mema dana" , response);
+                MailDto mailDto = new MailDto("skserveremail@gmail.com", "XKCD mema dana" , response);
                 outputChannel.output().send(MessageBuilder.withPayload(mailDto).build());
                 logger.info("Hello");
             }
