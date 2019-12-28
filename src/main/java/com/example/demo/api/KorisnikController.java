@@ -96,6 +96,7 @@ public class KorisnikController {
 
 
     }
+    @CrossOrigin(origins = "http://localhost:8090")
     @PatchMapping("/subscribe")
     public int patchKorisnik(@RequestBody Map<String, Object> korisnik){
 
@@ -103,6 +104,7 @@ public class KorisnikController {
         return korisnikService.patchKorisnik(korisnik.get("email"), korisnik.get("imeServisa"));
     }
 
+    @CrossOrigin(origins = "http://localhost:8090")
     @PatchMapping("/subscribeSettings")
     public int patchKorisnikSubscriptions(@RequestBody Map<String, Object> korisnik){
 

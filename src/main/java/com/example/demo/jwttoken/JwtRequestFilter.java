@@ -26,12 +26,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        System.out.println("///////////////imena headera = ");
-        Enumeration<String> iterator = request.getHeaderNames();
-        while(iterator.hasMoreElements()){
-            System.out.println(iterator.nextElement());
-        }
-        System.out.println("//////////gotovo sa imenima ");
+
         final String requestTokenHeader = request.getHeader("Authorization");
         System.out.println("JwtRequestFilter : Ovo je dobio kao request token header(Nema razmaka posle jednako) =" +requestTokenHeader);
 

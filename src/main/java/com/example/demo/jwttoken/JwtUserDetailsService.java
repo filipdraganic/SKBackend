@@ -31,7 +31,6 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         for(Korisnik korisnik: korisnici){
             String email= korisnik.getEmail();
-            System.out.println("Ponudjeni name = " + email);
             if (email.equals(username)) {
                 return new User(email, hash(korisnik.getPassword()),
                         new ArrayList<>());
