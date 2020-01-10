@@ -50,7 +50,7 @@ public class Scheduler {
 
     }
 
-    //@Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 10000)
     public void publish(){
         List<Korisnik> korisnici = korisnikDao.findAll();
 
@@ -82,7 +82,7 @@ public class Scheduler {
         }
 
     }
-    //@Scheduled(fixedDelay = 30*60000)
+    @Scheduled(fixedDelay = 30*60000)
     public void publishNaTridesetMinuta(){
         List<Korisnik> korisnici = korisnikDao.findAll();
 
@@ -111,7 +111,7 @@ public class Scheduler {
         }
     }
 
-    //@Scheduled(fixedDelay = 60*60000)
+    @Scheduled(fixedDelay = 60*60000)
     public void publishNaSatVremena(){
         List<Korisnik> korisnici = korisnikDao.findAll();
 
